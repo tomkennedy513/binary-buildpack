@@ -1,5 +1,12 @@
 # Binary Buildpack Sample
 
+## What is this buildpack for
+
+This buildpack is for installing a dependent binary onto the path of an app image that you build. The buildpack 
+will operate in airgapped environments by downloading the dependency during packaging instead of during build time. 
+The buildpack will also generate sbom data for the dependency.
+
+
 ## How to use this buildpack
 
 ### Initial Setup
@@ -8,7 +15,7 @@
    1. [pack](https://buildpacks.io/docs/tools/pack/)
    2. [jam](https://github.com/paketo-buildpacks/jam)
 3. Update `buildpack.toml`
-   1. change the `buildpack.id` field to a new id (ex. `my-buildpack/ytt`)'\
+   1. change the `buildpack.id` field to a new id (ex. `my-buildpack/ytt`)
    2. change the `buildpack.homepage` field to be your forked git repo url
    3. update `metadata.dependencies` to contain the binary you would like to be installed
 4. Update `constants.go`
