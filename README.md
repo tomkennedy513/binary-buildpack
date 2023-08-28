@@ -28,6 +28,6 @@ pull in. If type is a tar.gz, you can add `strip-components=` if needed.
 
 ## Testing with the sample app
 1. package the buildpack with `./scripts/package.sh --image binary-buildpack --version 0.0.1`
-2. run `pack build sample-app -e BP_GO_TARGETS="./cmd/sample-app" --trust-builder --buildpack binary-buildpack --buildpack paketo-buildpacks/go`
+2. run `pack build sample-app -e BP_GO_TARGETS="./cmd/sample-app" --buildpack binary-buildpack --buildpack paketo-buildpacks/go --builder paketobuildpacks/builder-jammy-tiny --trust-builder`
 3. run the sample app with `docker run -it sample-app <ARGS>` where `ARGS` is any args to pass to the binary that was packed into the app
    1. This is to test that the binary is actually accessible on the path from your app 
