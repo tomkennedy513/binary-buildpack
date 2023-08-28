@@ -1,0 +1,27 @@
+api = "0.7"
+
+[buildpack]
+description = "A buildpack for providing a binary to as a launch process"
+homepage = "https://github.com/tomkennedy513/binary-buildpack"  #Change me
+id = "tomkennedy.dev/binary-buildpack" #Change me
+name = "Binary Buildpack"
+sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
+
+[metadata]
+include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
+pre-package = "./scripts/build.sh"
+
+#Change below
+[[metadata.dependencies]]
+checksum = "sha256:9bf62175c7cc0b54f9731a5b87ee40250f0457b1fce1b0b36019c2f8d96db8f8"
+id = "ytt"
+licenses = ["Apache-2.0"]
+name = "ytt"
+stacks = ["*"]
+uri = "https://github.com/carvel-dev/ytt/releases/download/v0.45.4/ytt-linux-amd64"
+source = "https://github.com/carvel-dev/ytt/archive/refs/tags/v0.45.4.tar.gz"
+source-checksum = "sha256:e4c8cd61879c83b41706fc969b0666fe5d69fecd259bb12a010ed9d9d98baa92"
+version = "0.45.4"
+
+[[stacks]]
+id = "*"
