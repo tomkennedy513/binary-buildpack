@@ -1,6 +1,6 @@
 module buildpack
 
-go 1.21
+go 1.20
 
 require github.com/paketo-buildpacks/packit/v2 v2.11.0
 

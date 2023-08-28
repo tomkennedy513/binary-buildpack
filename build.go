@@ -2,6 +2,7 @@ package buildpack
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -45,7 +46,9 @@ func Build(
 			return packit.BuildResult{}, err
 		}
 
-		launchMetadata := packit.LaunchMetadata{BOM: bom}
+		launchMetadata := packit.LaunchMetadata{
+			BOM: bom,
+		}
 
 		cachedChecksum, ok := binaryLayer.Metadata["dependency-checksum"].(string)
 		if ok && cargo.Checksum(dependency.Checksum).MatchString(cachedChecksum) {
@@ -68,14 +71,19 @@ func Build(
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
-
 		binaryLayer.Launch = true
 		binaryLayer.Cache = true
+
+		binDirectory := filepath.Join(binaryLayer.Path, "bin")
+		err = os.MkdirAll(binDirectory, 0755)
+		if err != nil {
+			return packit.BuildResult{}, err
+		}
 
 		logger.Subprocess(fmt.Sprintf("Installing %s", BinaryName))
 
 		duration, err := clock.Measure(func() error {
-			return dependencyService.Deliver(dependency, context.CNBPath, binaryLayer.Path, context.Platform.Path)
+			return dependencyService.Deliver(dependency, context.CNBPath, binDirectory, context.Platform.Path)
 		})
 		if err != nil {
 			return packit.BuildResult{}, err
@@ -101,14 +109,6 @@ func Build(
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
-
-		launchMetadata.Processes = []packit.Process{
-			{
-				Type:    BinaryName,
-				Command: filepath.Join(binaryLayer.Path, BinaryName),
-			},
-		}
-		logger.LaunchProcesses(launchMetadata.Processes)
 
 		binaryLayer.Metadata = map[string]interface{}{
 			"dependency-checksum": dependency.Checksum,
